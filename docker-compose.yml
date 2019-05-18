@@ -1,12 +1,21 @@
-version: "3"
+version: '3.2'
 services:
-
   jenkins:
     image: jenkinsci/jenkins
-    ports:
-      - "8080:8080"
-    container_name: jenkins
     volumes:
       - ./jenkins:/var/jenkins_home:rw
-        # - /var/run/docker.sock:/var/run/docker.sock
-        # - /usr/local/bin/docker:/usr/bin/docker 
+      - ./war:/mnt/:rw
+    ports:
+      - 8080:8080
+    container_name: jenkins
+
+  tomcat:
+    image: tomcat
+    ports:
+      - 7777:8080
+    container_name: tomcat
+    depends_on:
+      - jenkins
+    volumes:
+      - ./war/:/usr/local/tomcat/webapps
+~                                          
